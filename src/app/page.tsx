@@ -7,6 +7,8 @@ import AddTreeForm from '@/components/AddTreeForm';
 import Map from '@/components/Map';
 import Profile from '@/components/Profile';
 
+type ViewType = 'home' | 'dashboard' | 'map';
+
 export default function Home() {
   const [user, setUser] = useState<any>(null);
   const [trees, setTrees] = useState<Tree[]>([]);
@@ -15,7 +17,7 @@ export default function Home() {
   const [showAddForm, setShowAddForm] = useState(false);
   const [selectedTree, setSelectedTree] = useState<Tree | null>(null);
   const [showProfile, setShowProfile] = useState(false);
-  const [view, setView] = useState<'home' | 'dashboard' | 'map'>('home');
+  const [view, setView] = useState<ViewType>('home');
 
   useEffect(() => {
     const getUser = async () => {
@@ -94,7 +96,6 @@ export default function Home() {
   if (view === 'home' && !user) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
-        {/* Header */}
         <header className="bg-white shadow-sm">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex justify-between items-center">
@@ -112,7 +113,6 @@ export default function Home() {
           </div>
         </header>
 
-        {/* Hero Section */}
         <section className="py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-5xl font-bold text-gray-900 mb-6">
@@ -123,7 +123,6 @@ export default function Home() {
               Every tree counts in our fight against climate change.
             </p>
             
-            {/* Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
               <div className="bg-white rounded-xl p-6 shadow-lg">
                 <div className="text-4xl mb-2">🌳</div>
@@ -151,7 +150,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Features */}
         <section className="py-16 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h3 className="text-3xl font-bold text-center mb-12">Why Choose LeafyBuddy?</h3>
@@ -183,11 +181,11 @@ export default function Home() {
     );
   }
 
-  // User Dashboard
-  if (view === 'dashboard') {
+  const currentView: ViewType = view;
+
+  if (currentView === 'dashboard' || currentView === 'map') {
     return (
       <div className="min-h-screen bg-gray-50">
-        {/* Navigation */}
         <nav className="bg-white shadow-sm">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center py-4">
@@ -198,13 +196,13 @@ export default function Home() {
               <div className="flex items-center space-x-4">
                 <button
                   onClick={() => setView('dashboard')}
-                  className={`px-4 py-2 rounded-lg ${view === 'dashboard' ? 'bg-green-100 text-green-800' : 'text-gray-600 hover:text-green-600'}`}
+                  className={`px-4 py-2 rounded-lg ${currentView === 'dashboard' ? 'bg-green-100 text-green-800' : 'text-gray-600 hover:text-green-600'}`}
                 >
                   Dashboard
                 </button>
                 <button
                   onClick={() => setView('map')}
-                  className={`px-4 py-2 rounded-lg ${view === 'map' ? 'bg-green-100 text-green-800' : 'text-gray-600 hover:text-green-600'}`}
+                  className={`px-4 py-2 rounded-lg ${currentView === 'map' ? 'bg-green-100 text-green-800' : 'text-gray-600 hover:text-green-600'}`}
                 >
                   Map View
                 </button>
@@ -231,141 +229,100 @@ export default function Home() {
           </div>
         </nav>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div className="bg-white rounded-xl p-6 shadow-sm">
-              <div className="flex items-center">
-                <div className="text-3xl mr-4">🌳</div>
-                <div>
-                  <div className="text-2xl font-bold text-green-600">{trees.length}</div>
-                  <div className="text-gray-600">Your Trees</div>
-                </div>
-              </div>
-            </div>
-            <div className="bg-white rounded-xl p-6 shadow-sm">
-              <div className="flex items-center">
-                <div className="text-3xl mr-4">🌍</div>
-                <div>
-                  <div className="text-2xl font-bold text-blue-600">{new Set(trees.map(t => `${Math.floor(t.latitude)},${Math.floor(t.longitude)}`)).size}</div>
-                  <div className="text-gray-600">Locations</div>
-                </div>
-              </div>
-            </div>
-            <div className="bg-white rounded-xl p-6 shadow-sm">
-              <div className="flex items-center">
-                <div className="text-3xl mr-4">📅</div>
-                <div>
-                  <div className="text-2xl font-bold text-purple-600">
-                    {trees.length > 0 ? Math.floor((Date.now() - new Date(trees[trees.length - 1].planted_date).getTime()) / (1000 * 60 * 60 * 24)) : 0}
+        {currentView === 'dashboard' ? (
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              <div className="bg-white rounded-xl p-6 shadow-sm">
+                <div className="flex items-center">
+                  <div className="text-3xl mr-4">🌳</div>
+                  <div>
+                    <div className="text-2xl font-bold text-green-600">{trees.length}</div>
+                    <div className="text-gray-600">Your Trees</div>
                   </div>
-                  <div className="text-gray-600">Days Active</div>
+                </div>
+              </div>
+              <div className="bg-white rounded-xl p-6 shadow-sm">
+                <div className="flex items-center">
+                  <div className="text-3xl mr-4">🌍</div>
+                  <div>
+                    <div className="text-2xl font-bold text-blue-600">{new Set(trees.map(t => `${Math.floor(t.latitude)},${Math.floor(t.longitude)}`)).size}</div>
+                    <div className="text-gray-600">Locations</div>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-white rounded-xl p-6 shadow-sm">
+                <div className="flex items-center">
+                  <div className="text-3xl mr-4">📅</div>
+                  <div>
+                    <div className="text-2xl font-bold text-purple-600">
+                      {trees.length > 0 ? Math.floor((Date.now() - new Date(trees[trees.length - 1].planted_date).getTime()) / (1000 * 60 * 60 * 24)) : 0}
+                    </div>
+                    <div className="text-gray-600">Days Active</div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Action Button */}
-          <div className="mb-8">
-            <button
-              onClick={() => setShowAddForm(true)}
-              className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors shadow-lg flex items-center space-x-2"
-            >
-              <span className="text-xl">+</span>
-              <span>Add New Tree</span>
-            </button>
-          </div>
-
-          {/* Trees Grid */}
-          {trees.length === 0 ? (
-            <div className="bg-white rounded-xl p-12 text-center shadow-sm">
-              <div className="text-6xl mb-4">🌱</div>
-              <h2 className="text-2xl font-bold mb-4 text-gray-800">Plant Your First Tree!</h2>
-              <p className="text-gray-600 mb-6">Start your green journey by adding your first tree to the map.</p>
+            <div className="mb-8">
               <button
                 onClick={() => setShowAddForm(true)}
-                className="bg-green-600 text-white px-8 py-3 rounded-lg hover:bg-green-700 transition-colors"
+                className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors shadow-lg flex items-center space-x-2"
               >
-                🌳 Add Your First Tree
+                <span className="text-xl">+</span>
+                <span>Add New Tree</span>
               </button>
             </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {trees.map((tree) => (
-                <div key={tree.id} className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-                  <img
-                    src={tree.image_url}
-                    alt={tree.name}
-                    className="w-full h-48 object-cover"
-                  />
-                  <div className="p-4">
-                    <h3 className="font-bold text-lg mb-1">{tree.name}</h3>
-                    {tree.species && <p className="text-green-600 text-sm mb-2">{tree.species}</p>}
-                    <p className="text-gray-500 text-sm mb-3">
-                      📅 {new Date(tree.planted_date).toLocaleDateString()}
-                    </p>
-                    <button
-                      onClick={() => setSelectedTree(tree)}
-                      className="w-full bg-gray-100 text-gray-700 py-2 rounded-lg hover:bg-gray-200 transition-colors"
-                    >
-                      View Details
-                    </button>
+
+            {trees.length === 0 ? (
+              <div className="bg-white rounded-xl p-12 text-center shadow-sm">
+                <div className="text-6xl mb-4">🌱</div>
+                <h2 className="text-2xl font-bold mb-4 text-gray-800">Plant Your First Tree!</h2>
+                <p className="text-gray-600 mb-6">Start your green journey by adding your first tree to the map.</p>
+                <button
+                  onClick={() => setShowAddForm(true)}
+                  className="bg-green-600 text-white px-8 py-3 rounded-lg hover:bg-green-700 transition-colors"
+                >
+                  🌳 Add Your First Tree
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {trees.map((tree) => (
+                  <div key={tree.id} className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+                    <img
+                      src={tree.image_url}
+                      alt={tree.name}
+                      className="w-full h-48 object-cover"
+                    />
+                    <div className="p-4">
+                      <h3 className="font-bold text-lg mb-1">{tree.name}</h3>
+                      {tree.species && <p className="text-green-600 text-sm mb-2">{tree.species}</p>}
+                      <p className="text-gray-500 text-sm mb-3">
+                        📅 {new Date(tree.planted_date).toLocaleDateString()}
+                      </p>
+                      <button
+                        onClick={() => setSelectedTree(tree)}
+                        className="w-full bg-gray-100 text-gray-700 py-2 rounded-lg hover:bg-gray-200 transition-colors"
+                      >
+                        View Details
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  }
-
-  // Map View
-  if (view === 'map') {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        {/* Navigation */}
-        <nav className="bg-white shadow-sm">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center py-4">
-              <div className="flex items-center space-x-4">
-                <span className="text-2xl">🌳</span>
-                <h1 className="text-xl font-bold text-green-800">LeafyBuddy</h1>
+                ))}
               </div>
-              <div className="flex items-center space-x-4">
-                <button
-                  onClick={() => setView('dashboard')}
-                  className="text-gray-600 hover:text-green-600 px-4 py-2 rounded-lg"
-                >
-                  Dashboard
-                </button>
-                <button
-                  onClick={() => setView('map')}
-                  className="bg-green-100 text-green-800 px-4 py-2 rounded-lg"
-                >
-                  Map View
-                </button>
-                <button
-                  onClick={signOut}
-                  className="text-gray-600 hover:text-red-600 px-3 py-1 rounded"
-                >
-                  Sign Out
-                </button>
-              </div>
-            </div>
+            )}
           </div>
-        </nav>
-
-        <div className="h-[calc(100vh-80px)]">
-          <Map trees={trees} onTreeClick={setSelectedTree} />
-        </div>
+        ) : (
+          <div className="h-[calc(100vh-80px)]">
+            <Map trees={trees} onTreeClick={setSelectedTree} />
+          </div>
+        )}
       </div>
     );
   }
 
   return (
     <>
-      {/* Add Tree Form Modal */}
       {showAddForm && (
         <AddTreeForm
           onSuccess={() => {
@@ -376,7 +333,6 @@ export default function Home() {
         />
       )}
 
-      {/* Tree Details Modal */}
       {selectedTree && (
         <TreeDetailsModal
           tree={selectedTree}
@@ -384,7 +340,6 @@ export default function Home() {
         />
       )}
 
-      {/* Profile Modal */}
       {showProfile && (
         <Profile onClose={() => setShowProfile(false)} />
       )}
@@ -392,10 +347,7 @@ export default function Home() {
   );
 }
 
-// Tree Details Modal Component
 function TreeDetailsModal({ tree, onClose }: { tree: Tree; onClose: () => void }) {
-  const [showShare, setShowShare] = useState(false);
-  
   const shareTree = async () => {
     const shareUrl = `${window.location.origin}/tree/${tree.id}`;
     const shareText = `Check out my tree "${tree.name}" on LeafyBuddy! 🌳`;
@@ -408,7 +360,6 @@ function TreeDetailsModal({ tree, onClose }: { tree: Tree; onClose: () => void }
           url: shareUrl,
         });
       } catch (err) {
-        // Fallback to clipboard
         navigator.clipboard.writeText(shareUrl);
         alert('Link copied to clipboard!');
       }
@@ -459,7 +410,6 @@ function TreeDetailsModal({ tree, onClose }: { tree: Tree; onClose: () => void }
           )}
         </div>
 
-        {/* Environmental Impact */}
         <div className="bg-green-50 rounded-lg p-4 mb-6">
           <h3 className="font-semibold text-gray-800 mb-3 flex items-center space-x-2">
             <span>🌍</span>
@@ -477,7 +427,6 @@ function TreeDetailsModal({ tree, onClose }: { tree: Tree; onClose: () => void }
           </div>
         </div>
 
-        {/* Action Buttons */}
         <div className="flex gap-3">
           <button
             onClick={shareTree}
