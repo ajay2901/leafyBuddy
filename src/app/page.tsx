@@ -54,13 +54,16 @@ export default function Home() {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
     const { data, error } = await supabase.from('trees').select('*').eq('user_id', user.id).order('planted_date', { ascending: false });
+    console.log('✅ Fetched trees:', data?.length, 'trees');
+    if (data) setTrees(data);
     setTrees(data || []);
   };
 
   const signIn = () => supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: 'https://leafybuddy.vercel.app' } });
   const signOut = () => supabase.auth.signOut();
 
-  const daysActive = trees.length > 0 ? Math.max(1, Math.floor((Date.now() - new Date(trees[0].planted_date).getTime()) / (1000 * 60 * 60 * 24))) : 0;
+  const oldestTree = trees.length > 0 ? trees[trees.length - 1] : null;
+  const daysActive = oldestTree ? Math.max(1, Math.floor((Date.now() - new Date(oldestTree.planted_date).getTime()) / (1000 * 60 * 60 * 24))) : 0;
   const uniqueLocations = new Set(trees.map(t => `${Math.floor(t.latitude)},${Math.floor(t.longitude)}`)).size;
 
   if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="text-4xl animate-spin">🌱</div></div>;
@@ -150,8 +153,7 @@ export default function Home() {
       ) : (
         <MapView trees={trees} onTreeClick={setSelectedTree} />
       )}
-
-      {showAddForm && <AddTreeForm onClose={() => setShowAddForm(false)} onSuccess={() => { setShowAddForm(false); fetchTrees(); alert('✅ Tree added successfully!'); }} />}
+      {showAddForm && <AddTreeForm onClose={() => setShowAddForm(false)} onSuccess={async () => { setShowAddForm(false); await fetchTrees(); alert('✅ Tree added successfully!'); }} />}
       {selectedTree && <TreeModal tree={selectedTree} onClose={() => setSelectedTree(null)} />}
       {showProfile && <ProfileModal user={user} trees={trees} daysActive={daysActive} onClose={() => setShowProfile(false)} />}
     </div>
