@@ -41,7 +41,7 @@ export default function Home() {
   const checkUser = async () => {
     const { data: { user } } = await supabase.auth.getUser();
     setUser(user);
-    if (user) fetchTrees();
+    if (user) await fetchTrees();
     setLoading(false);
   };
 
@@ -53,14 +53,14 @@ export default function Home() {
   const fetchTrees = async () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
-    const { data } = await supabase.from('trees').select('*').eq('user_id', user.id).order('created_at', { ascending: false });
+    const { data, error } = await supabase.from('trees').select('*').eq('user_id', user.id).order('planted_date', { ascending: false });
     setTrees(data || []);
   };
 
   const signIn = () => supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: 'https://leafybuddy.vercel.app' } });
   const signOut = () => supabase.auth.signOut();
 
-  const daysActive = trees.length > 0 ? Math.max(1, Math.floor((Date.now() - new Date(trees[trees.length - 1].created_at).getTime()) / (1000 * 60 * 60 * 24))) : 0;
+  const daysActive = trees.length > 0 ? Math.max(1, Math.floor((Date.now() - new Date(trees[0].planted_date).getTime()) / (1000 * 60 * 60 * 24))) : 0;
   const uniqueLocations = new Set(trees.map(t => `${Math.floor(t.latitude)},${Math.floor(t.longitude)}`)).size;
 
   if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="text-4xl animate-spin">🌱</div></div>;
@@ -157,6 +157,8 @@ export default function Home() {
     </div>
   );
 }
+
+{showAddForm && <AddTreeForm onClose={() => setShowAddForm(false)} onSuccess={async () => { setShowAddForm(false); await fetchTrees(); alert('✅ Tree added successfully!'); }} />}
 
 function MapView({ trees, onTreeClick }: { trees: Tree[]; onTreeClick: (tree: Tree) => void }) {
   return (
