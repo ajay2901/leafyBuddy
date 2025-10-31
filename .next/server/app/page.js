@@ -56,6 +56,72 @@ module.exports = require("next/dist/compiled/next-server/app-page.runtime.dev.js
 
 /***/ }),
 
+/***/ "http":
+/*!***********************!*\
+  !*** external "http" ***!
+  \***********************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("http");
+
+/***/ }),
+
+/***/ "https":
+/*!************************!*\
+  !*** external "https" ***!
+  \************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("https");
+
+/***/ }),
+
+/***/ "punycode":
+/*!***************************!*\
+  !*** external "punycode" ***!
+  \***************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("punycode");
+
+/***/ }),
+
+/***/ "stream":
+/*!*************************!*\
+  !*** external "stream" ***!
+  \*************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("stream");
+
+/***/ }),
+
+/***/ "url":
+/*!**********************!*\
+  !*** external "url" ***!
+  \**********************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("url");
+
+/***/ }),
+
+/***/ "zlib":
+/*!***********************!*\
+  !*** external "zlib" ***!
+  \***********************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("zlib");
+
+/***/ }),
+
 /***/ "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-app-loader.js?name=app%2Fpage&page=%2Fpage&appPaths=%2Fpage&pagePath=private-next-app-dir%2Fpage.tsx&appDir=A%3A%5CleafyBuddy%5CleafyBuddyApp%5Csrc%5Capp&pageExtensions=tsx&pageExtensions=ts&pageExtensions=jsx&pageExtensions=js&rootDir=A%3A%5CleafyBuddy%5CleafyBuddyApp&isDev=true&tsconfigPath=tsconfig.json&basePath=&assetPrefix=&nextConfigOutput=&preferredRegion=&middlewareConfig=e30%3D!":
 /*!******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/next/dist/build/webpack/loaders/next-app-loader.js?name=app%2Fpage&page=%2Fpage&appPaths=%2Fpage&pagePath=private-next-app-dir%2Fpage.tsx&appDir=A%3A%5CleafyBuddy%5CleafyBuddyApp%5Csrc%5Capp&pageExtensions=tsx&pageExtensions=ts&pageExtensions=jsx&pageExtensions=js&rootDir=A%3A%5CleafyBuddy%5CleafyBuddyApp&isDev=true&tsconfigPath=tsconfig.json&basePath=&assetPrefix=&nextConfigOutput=&preferredRegion=&middlewareConfig=e30%3D! ***!
@@ -87,13 +153,24 @@ eval("Promise.resolve(/*! import() eager */).then(__webpack_require__.t.bind(__w
 
 /***/ }),
 
-/***/ "(ssr)/./node_modules/next/dist/build/webpack/loaders/next-flight-client-entry-loader.js?server=true!":
-/*!******************************************************************************************************!*\
-  !*** ./node_modules/next/dist/build/webpack/loaders/next-flight-client-entry-loader.js?server=true! ***!
-  \******************************************************************************************************/
-/***/ (() => {
+/***/ "(ssr)/./node_modules/next/dist/build/webpack/loaders/next-flight-client-entry-loader.js?modules=%7B%22request%22%3A%22A%3A%5C%5CleafyBuddy%5C%5CleafyBuddyApp%5C%5Csrc%5C%5Capp%5C%5Cpage.tsx%22%2C%22ids%22%3A%5B%5D%7D&server=true!":
+/*!***************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/next/dist/build/webpack/loaders/next-flight-client-entry-loader.js?modules=%7B%22request%22%3A%22A%3A%5C%5CleafyBuddy%5C%5CleafyBuddyApp%5C%5Csrc%5C%5Capp%5C%5Cpage.tsx%22%2C%22ids%22%3A%5B%5D%7D&server=true! ***!
+  \***************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
+eval("Promise.resolve(/*! import() eager */).then(__webpack_require__.bind(__webpack_require__, /*! ./src/app/page.tsx */ \"(ssr)/./src/app/page.tsx\"));\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHNzcikvLi9ub2RlX21vZHVsZXMvbmV4dC9kaXN0L2J1aWxkL3dlYnBhY2svbG9hZGVycy9uZXh0LWZsaWdodC1jbGllbnQtZW50cnktbG9hZGVyLmpzP21vZHVsZXM9JTdCJTIycmVxdWVzdCUyMiUzQSUyMkElM0ElNUMlNUNsZWFmeUJ1ZGR5JTVDJTVDbGVhZnlCdWRkeUFwcCU1QyU1Q3NyYyU1QyU1Q2FwcCU1QyU1Q3BhZ2UudHN4JTIyJTJDJTIyaWRzJTIyJTNBJTVCJTVEJTdEJnNlcnZlcj10cnVlISIsIm1hcHBpbmdzIjoiQUFBQSxnSkFBc0YiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9teXRyZWUvP2NmNTMiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0KC8qIHdlYnBhY2tNb2RlOiBcImVhZ2VyXCIgKi8gXCJBOlxcXFxsZWFmeUJ1ZGR5XFxcXGxlYWZ5QnVkZHlBcHBcXFxcc3JjXFxcXGFwcFxcXFxwYWdlLnRzeFwiKTtcbiJdLCJuYW1lcyI6W10sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///(ssr)/./node_modules/next/dist/build/webpack/loaders/next-flight-client-entry-loader.js?modules=%7B%22request%22%3A%22A%3A%5C%5CleafyBuddy%5C%5CleafyBuddyApp%5C%5Csrc%5C%5Capp%5C%5Cpage.tsx%22%2C%22ids%22%3A%5B%5D%7D&server=true!\n");
 
+/***/ }),
+
+/***/ "(ssr)/./src/app/page.tsx":
+/*!**************************!*\
+  !*** ./src/app/page.tsx ***!
+  \**************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ Home)\n/* harmony export */ });\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-dev-runtime */ \"(ssr)/./node_modules/next/dist/server/future/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js\");\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ \"(ssr)/./node_modules/next/dist/server/future/route-modules/app-page/vendored/ssr/react.js\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);\n/* __next_internal_client_entry_do_not_use__ default auto */ \n\nfunction Home() {\n    const [supabaseTest, setSupabaseTest] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(\"Testing...\");\n    (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(()=>{\n        const testSupabase = async ()=>{\n            try {\n                const { createClient } = await Promise.all(/*! import() */[__webpack_require__.e(\"vendor-chunks/@supabase\"), __webpack_require__.e(\"vendor-chunks/whatwg-url\"), __webpack_require__.e(\"vendor-chunks/tr46\"), __webpack_require__.e(\"vendor-chunks/tslib\"), __webpack_require__.e(\"vendor-chunks/webidl-conversions\")]).then(__webpack_require__.bind(__webpack_require__, /*! @supabase/supabase-js */ \"(ssr)/./node_modules/@supabase/supabase-js/dist/module/index.js\"));\n                const supabase = createClient(\"https://ezxjtincbvdvxkdnqqko.supabase.co\", \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV6eGp0aW5jYnZkdnhrZG5xcWtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE4MzUwOTksImV4cCI6MjA3NzQxMTA5OX0.YdL-Z8D7ttKzo2uYe5ywyx5z2LF6K5kwkp5D8weWEfE\");\n                const { data, error } = await supabase.auth.getUser();\n                setSupabaseTest(error ? `Error: ${error.message}` : \"Supabase OK\");\n            } catch (err) {\n                setSupabaseTest(`Failed: ${err}`);\n            }\n        };\n        testSupabase();\n    }, []);\n    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n        className: \"p-8\",\n        children: [\n            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"h1\", {\n                className: \"text-2xl font-bold\",\n                children: \"Debug Page\"\n            }, void 0, false, {\n                fileName: \"A:\\\\leafyBuddy\\\\leafyBuddyApp\\\\src\\\\app\\\\page.tsx\",\n                lineNumber: 29,\n                columnNumber: 7\n            }, this),\n            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"p\", {\n                children: \"Environment check:\"\n            }, void 0, false, {\n                fileName: \"A:\\\\leafyBuddy\\\\leafyBuddyApp\\\\src\\\\app\\\\page.tsx\",\n                lineNumber: 30,\n                columnNumber: 7\n            }, this),\n            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"ul\", {\n                children: [\n                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"li\", {\n                        children: [\n                            \"Supabase URL: \",\n                             true ? \"✅\" : 0\n                        ]\n                    }, void 0, true, {\n                        fileName: \"A:\\\\leafyBuddy\\\\leafyBuddyApp\\\\src\\\\app\\\\page.tsx\",\n                        lineNumber: 32,\n                        columnNumber: 9\n                    }, this),\n                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"li\", {\n                        children: [\n                            \"Supabase Key: \",\n                             true ? \"✅\" : 0\n                        ]\n                    }, void 0, true, {\n                        fileName: \"A:\\\\leafyBuddy\\\\leafyBuddyApp\\\\src\\\\app\\\\page.tsx\",\n                        lineNumber: 33,\n                        columnNumber: 9\n                    }, this),\n                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"li\", {\n                        children: [\n                            \"Firebase API: \",\n                             true ? \"✅\" : 0\n                        ]\n                    }, void 0, true, {\n                        fileName: \"A:\\\\leafyBuddy\\\\leafyBuddyApp\\\\src\\\\app\\\\page.tsx\",\n                        lineNumber: 34,\n                        columnNumber: 9\n                    }, this)\n                ]\n            }, void 0, true, {\n                fileName: \"A:\\\\leafyBuddy\\\\leafyBuddyApp\\\\src\\\\app\\\\page.tsx\",\n                lineNumber: 31,\n                columnNumber: 7\n            }, this),\n            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"p\", {\n                children: [\n                    \"Supabase Connection: \",\n                    supabaseTest\n                ]\n            }, void 0, true, {\n                fileName: \"A:\\\\leafyBuddy\\\\leafyBuddyApp\\\\src\\\\app\\\\page.tsx\",\n                lineNumber: 36,\n                columnNumber: 7\n            }, this)\n        ]\n    }, void 0, true, {\n        fileName: \"A:\\\\leafyBuddy\\\\leafyBuddyApp\\\\src\\\\app\\\\page.tsx\",\n        lineNumber: 28,\n        columnNumber: 5\n    }, this);\n}\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHNzcikvLi9zcmMvYXBwL3BhZ2UudHN4IiwibWFwcGluZ3MiOiI7Ozs7Ozs7OztBQUU0QztBQUU3QixTQUFTRTtJQUN0QixNQUFNLENBQUNDLGNBQWNDLGdCQUFnQixHQUFHSCwrQ0FBUUEsQ0FBQztJQUVqREQsZ0RBQVNBLENBQUM7UUFDUixNQUFNSyxlQUFlO1lBQ25CLElBQUk7Z0JBQ0YsTUFBTSxFQUFFQyxZQUFZLEVBQUUsR0FBRyxNQUFNLDJhQUFPO2dCQUN0QyxNQUFNQyxXQUFXRCxhQUNmRSwwQ0FBb0MsRUFDcENBLGtOQUF5QztnQkFHM0MsTUFBTSxFQUFFSSxJQUFJLEVBQUVDLEtBQUssRUFBRSxHQUFHLE1BQU1OLFNBQVNPLElBQUksQ0FBQ0MsT0FBTztnQkFDbkRYLGdCQUFnQlMsUUFBUSxDQUFDLE9BQU8sRUFBRUEsTUFBTUcsT0FBTyxDQUFDLENBQUMsR0FBRztZQUN0RCxFQUFFLE9BQU9DLEtBQUs7Z0JBQ1piLGdCQUFnQixDQUFDLFFBQVEsRUFBRWEsSUFBSSxDQUFDO1lBQ2xDO1FBQ0Y7UUFFQVo7SUFDRixHQUFHLEVBQUU7SUFFTCxxQkFDRSw4REFBQ2E7UUFBSUMsV0FBVTs7MEJBQ2IsOERBQUNDO2dCQUFHRCxXQUFVOzBCQUFxQjs7Ozs7OzBCQUNuQyw4REFBQ0U7MEJBQUU7Ozs7OzswQkFDSCw4REFBQ0M7O2tDQUNDLDhEQUFDQzs7NEJBQUc7NEJBQWVmLEtBQW9DLEdBQUcsTUFBTTs7Ozs7OztrQ0FDaEUsOERBQUNlOzs0QkFBRzs0QkFBZWYsS0FBeUMsR0FBRyxNQUFNOzs7Ozs7O2tDQUNyRSw4REFBQ2U7OzRCQUFHOzRCQUFlZixLQUF3QyxHQUFHLE1BQU07Ozs7Ozs7Ozs7Ozs7MEJBRXRFLDhEQUFDYTs7b0JBQUU7b0JBQXNCbEI7Ozs7Ozs7Ozs7Ozs7QUFHL0IiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9teXRyZWUvLi9zcmMvYXBwL3BhZ2UudHN4P2Y2OGEiXSwic291cmNlc0NvbnRlbnQiOlsiJ3VzZSBjbGllbnQnO1xuXG5pbXBvcnQgeyB1c2VFZmZlY3QsIHVzZVN0YXRlIH0gZnJvbSAncmVhY3QnO1xuXG5leHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBIb21lKCkge1xuICBjb25zdCBbc3VwYWJhc2VUZXN0LCBzZXRTdXBhYmFzZVRlc3RdID0gdXNlU3RhdGUoJ1Rlc3RpbmcuLi4nKTtcblxuICB1c2VFZmZlY3QoKCkgPT4ge1xuICAgIGNvbnN0IHRlc3RTdXBhYmFzZSA9IGFzeW5jICgpID0+IHtcbiAgICAgIHRyeSB7XG4gICAgICAgIGNvbnN0IHsgY3JlYXRlQ2xpZW50IH0gPSBhd2FpdCBpbXBvcnQoJ0BzdXBhYmFzZS9zdXBhYmFzZS1qcycpO1xuICAgICAgICBjb25zdCBzdXBhYmFzZSA9IGNyZWF0ZUNsaWVudChcbiAgICAgICAgICBwcm9jZXNzLmVudi5ORVhUX1BVQkxJQ19TVVBBQkFTRV9VUkwhLFxuICAgICAgICAgIHByb2Nlc3MuZW52Lk5FWFRfUFVCTElDX1NVUEFCQVNFX0FOT05fS0VZIVxuICAgICAgICApO1xuICAgICAgICBcbiAgICAgICAgY29uc3QgeyBkYXRhLCBlcnJvciB9ID0gYXdhaXQgc3VwYWJhc2UuYXV0aC5nZXRVc2VyKCk7XG4gICAgICAgIHNldFN1cGFiYXNlVGVzdChlcnJvciA/IGBFcnJvcjogJHtlcnJvci5tZXNzYWdlfWAgOiAnU3VwYWJhc2UgT0snKTtcbiAgICAgIH0gY2F0Y2ggKGVycikge1xuICAgICAgICBzZXRTdXBhYmFzZVRlc3QoYEZhaWxlZDogJHtlcnJ9YCk7XG4gICAgICB9XG4gICAgfTtcblxuICAgIHRlc3RTdXBhYmFzZSgpO1xuICB9LCBbXSk7XG5cbiAgcmV0dXJuIChcbiAgICA8ZGl2IGNsYXNzTmFtZT1cInAtOFwiPlxuICAgICAgPGgxIGNsYXNzTmFtZT1cInRleHQtMnhsIGZvbnQtYm9sZFwiPkRlYnVnIFBhZ2U8L2gxPlxuICAgICAgPHA+RW52aXJvbm1lbnQgY2hlY2s6PC9wPlxuICAgICAgPHVsPlxuICAgICAgICA8bGk+U3VwYWJhc2UgVVJMOiB7cHJvY2Vzcy5lbnYuTkVYVF9QVUJMSUNfU1VQQUJBU0VfVVJMID8gJ+KchScgOiAn4p2MJ308L2xpPlxuICAgICAgICA8bGk+U3VwYWJhc2UgS2V5OiB7cHJvY2Vzcy5lbnYuTkVYVF9QVUJMSUNfU1VQQUJBU0VfQU5PTl9LRVkgPyAn4pyFJyA6ICfinYwnfTwvbGk+XG4gICAgICAgIDxsaT5GaXJlYmFzZSBBUEk6IHtwcm9jZXNzLmVudi5ORVhUX1BVQkxJQ19GSVJFQkFTRV9BUElfS0VZID8gJ+KchScgOiAn4p2MJ308L2xpPlxuICAgICAgPC91bD5cbiAgICAgIDxwPlN1cGFiYXNlIENvbm5lY3Rpb246IHtzdXBhYmFzZVRlc3R9PC9wPlxuICAgIDwvZGl2PlxuICApO1xufVxuIl0sIm5hbWVzIjpbInVzZUVmZmVjdCIsInVzZVN0YXRlIiwiSG9tZSIsInN1cGFiYXNlVGVzdCIsInNldFN1cGFiYXNlVGVzdCIsInRlc3RTdXBhYmFzZSIsImNyZWF0ZUNsaWVudCIsInN1cGFiYXNlIiwicHJvY2VzcyIsImVudiIsIk5FWFRfUFVCTElDX1NVUEFCQVNFX1VSTCIsIk5FWFRfUFVCTElDX1NVUEFCQVNFX0FOT05fS0VZIiwiZGF0YSIsImVycm9yIiwiYXV0aCIsImdldFVzZXIiLCJtZXNzYWdlIiwiZXJyIiwiZGl2IiwiY2xhc3NOYW1lIiwiaDEiLCJwIiwidWwiLCJsaSIsIk5FWFRfUFVCTElDX0ZJUkVCQVNFX0FQSV9LRVkiXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///(ssr)/./src/app/page.tsx\n");
 
 /***/ }),
 
@@ -126,7 +203,14 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ Home)\n/* harmony export */ });\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-dev-runtime */ \"(rsc)/./node_modules/next/dist/server/future/route-modules/app-page/vendored/rsc/react-jsx-dev-runtime.js\");\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__);\n\nfunction Home() {\n    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n        className: \"p-8\",\n        children: [\n            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"h1\", {\n                className: \"text-2xl font-bold\",\n                children: \"Hello World!\"\n            }, void 0, false, {\n                fileName: \"A:\\\\leafyBuddy\\\\leafyBuddyApp\\\\src\\\\app\\\\page.tsx\",\n                lineNumber: 4,\n                columnNumber: 7\n            }, this),\n            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"p\", {\n                children: \"Environment check:\"\n            }, void 0, false, {\n                fileName: \"A:\\\\leafyBuddy\\\\leafyBuddyApp\\\\src\\\\app\\\\page.tsx\",\n                lineNumber: 5,\n                columnNumber: 7\n            }, this),\n            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"ul\", {\n                children: [\n                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"li\", {\n                        children: [\n                            \"Supabase URL: \",\n                             true ? \"✅\" : 0\n                        ]\n                    }, void 0, true, {\n                        fileName: \"A:\\\\leafyBuddy\\\\leafyBuddyApp\\\\src\\\\app\\\\page.tsx\",\n                        lineNumber: 7,\n                        columnNumber: 9\n                    }, this),\n                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"li\", {\n                        children: [\n                            \"Supabase Key: \",\n                             true ? \"✅\" : 0\n                        ]\n                    }, void 0, true, {\n                        fileName: \"A:\\\\leafyBuddy\\\\leafyBuddyApp\\\\src\\\\app\\\\page.tsx\",\n                        lineNumber: 8,\n                        columnNumber: 9\n                    }, this),\n                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"li\", {\n                        children: [\n                            \"Firebase API: \",\n                             true ? \"✅\" : 0\n                        ]\n                    }, void 0, true, {\n                        fileName: \"A:\\\\leafyBuddy\\\\leafyBuddyApp\\\\src\\\\app\\\\page.tsx\",\n                        lineNumber: 9,\n                        columnNumber: 9\n                    }, this)\n                ]\n            }, void 0, true, {\n                fileName: \"A:\\\\leafyBuddy\\\\leafyBuddyApp\\\\src\\\\app\\\\page.tsx\",\n                lineNumber: 6,\n                columnNumber: 7\n            }, this)\n        ]\n    }, void 0, true, {\n        fileName: \"A:\\\\leafyBuddy\\\\leafyBuddyApp\\\\src\\\\app\\\\page.tsx\",\n        lineNumber: 3,\n        columnNumber: 5\n    }, this);\n}\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHJzYykvLi9zcmMvYXBwL3BhZ2UudHN4IiwibWFwcGluZ3MiOiI7Ozs7Ozs7QUFBZSxTQUFTQTtJQUN0QixxQkFDRSw4REFBQ0M7UUFBSUMsV0FBVTs7MEJBQ2IsOERBQUNDO2dCQUFHRCxXQUFVOzBCQUFxQjs7Ozs7OzBCQUNuQyw4REFBQ0U7MEJBQUU7Ozs7OzswQkFDSCw4REFBQ0M7O2tDQUNDLDhEQUFDQzs7NEJBQUc7NEJBQWVDLEtBQW9DLEdBQUcsTUFBTTs7Ozs7OztrQ0FDaEUsOERBQUNEOzs0QkFBRzs0QkFBZUMsS0FBeUMsR0FBRyxNQUFNOzs7Ozs7O2tDQUNyRSw4REFBQ0Q7OzRCQUFHOzRCQUFlQyxLQUF3QyxHQUFHLE1BQU07Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFJNUUiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9teXRyZWUvLi9zcmMvYXBwL3BhZ2UudHN4P2Y2OGEiXSwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gSG9tZSgpIHtcbiAgcmV0dXJuIChcbiAgICA8ZGl2IGNsYXNzTmFtZT1cInAtOFwiPlxuICAgICAgPGgxIGNsYXNzTmFtZT1cInRleHQtMnhsIGZvbnQtYm9sZFwiPkhlbGxvIFdvcmxkITwvaDE+XG4gICAgICA8cD5FbnZpcm9ubWVudCBjaGVjazo8L3A+XG4gICAgICA8dWw+XG4gICAgICAgIDxsaT5TdXBhYmFzZSBVUkw6IHtwcm9jZXNzLmVudi5ORVhUX1BVQkxJQ19TVVBBQkFTRV9VUkwgPyAn4pyFJyA6ICfinYwnfTwvbGk+XG4gICAgICAgIDxsaT5TdXBhYmFzZSBLZXk6IHtwcm9jZXNzLmVudi5ORVhUX1BVQkxJQ19TVVBBQkFTRV9BTk9OX0tFWSA/ICfinIUnIDogJ+KdjCd9PC9saT5cbiAgICAgICAgPGxpPkZpcmViYXNlIEFQSToge3Byb2Nlc3MuZW52Lk5FWFRfUFVCTElDX0ZJUkVCQVNFX0FQSV9LRVkgPyAn4pyFJyA6ICfinYwnfTwvbGk+XG4gICAgICA8L3VsPlxuICAgIDwvZGl2PlxuICApO1xufVxuIl0sIm5hbWVzIjpbIkhvbWUiLCJkaXYiLCJjbGFzc05hbWUiLCJoMSIsInAiLCJ1bCIsImxpIiwicHJvY2VzcyIsImVudiIsIk5FWFRfUFVCTElDX1NVUEFCQVNFX1VSTCIsIk5FWFRfUFVCTElDX1NVUEFCQVNFX0FOT05fS0VZIiwiTkVYVF9QVUJMSUNfRklSRUJBU0VfQVBJX0tFWSJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///(rsc)/./src/app/page.tsx\n");
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var next_dist_build_webpack_loaders_next_flight_loader_module_proxy__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! next/dist/build/webpack/loaders/next-flight-loader/module-proxy */ "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-loader/module-proxy.js");
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,next_dist_build_webpack_loaders_next_flight_loader_module_proxy__WEBPACK_IMPORTED_MODULE_0__.createProxy)(String.raw`A:\leafyBuddy\leafyBuddyApp\src\app\page.tsx#default`));
+
 
 /***/ })
 
