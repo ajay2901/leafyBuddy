@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
+import { useState, useEffect, useRef } from 'react';
+
 
 interface Tree {
   id: string;
@@ -161,23 +163,64 @@ export default function Home() {
 }
 
 function MapView({ trees, onTreeClick }: { trees: Tree[]; onTreeClick: (tree: Tree) => void }) {
+  const mapContainer = useRef<HTMLDivElement>(null);
+  const map = useRef<any>(null);
+
+  useEffect(() => {
+    if (!mapContainer.current || trees.length === 0 || map.current) return;
+
+    // Calculate center from all trees
+    const avgLat = trees.reduce((sum, t) => sum + t.latitude, 0) / trees.length;
+    const avgLng = trees.reduce((sum, t) => sum + t.longitude, 0) / trees.length;
+
+    // Dynamic import to avoid SSR issues
+    import('maplibre-gl').then((maplibregl) => {
+      map.current = new maplibregl.Map({
+        container: mapContainer.current!,
+        style: 'https://tiles.openfreemap.org/styles/liberty',
+        center: [avgLng, avgLat],
+        zoom: 10
+      });
+
+      // Add markers for each tree
+      trees.forEach(tree => {
+        const el = document.createElement('div');
+        el.className = 'cursor-pointer';
+        el.innerHTML = '🌳';
+        el.style.fontSize = '24px';
+        el.onclick = () => onTreeClick(tree);
+
+        const popup = new maplibregl.Popup({ offset: 25 }).setHTML(
+          `<strong>${tree.name}</strong><br/>📅 ${new Date(tree.planted_date).toLocaleDateString()}`
+        );
+
+        new maplibregl.Marker({ element: el })
+          .setLngLat([tree.longitude, tree.latitude])
+          .setPopup(popup)
+          .addTo(map.current);
+      });
+    });
+
+    return () => map.current?.remove();
+  }, [trees]);
+
   return (
-    <div className="max-w-7xl mx-auto px-4 py-6 sm:py-8">
-      <div className="bg-white rounded-xl p-4 sm:p-8 shadow">
-        <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">🗺️ Your Trees on Map</h2>
+    <div className="max-w-7xl mx-auto px-4 py-6 sm:py-8 space-y-6">
+      {/* Tree Cards */}
+      <div className="bg-white rounded-xl p-4 sm:p-6 shadow">
+        <h2 className="text-xl sm:text-2xl font-bold mb-4">🌳 Your Trees ({trees.length})</h2>
         {trees.length === 0 ? (
           <p className="text-gray-500 text-center py-8">No trees yet. Add your first tree!</p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             {trees.map(tree => (
-              <div key={tree.id} className="border rounded-lg p-3 sm:p-4 hover:shadow-lg transition cursor-pointer" onClick={() => onTreeClick(tree)}>
-                <div className="flex gap-3 sm:gap-4">
-                  <img src={tree.image_url} alt={tree.name} className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded" />
+              <div key={tree.id} className="border rounded-lg p-3 hover:shadow-lg transition cursor-pointer" onClick={() => onTreeClick(tree)}>
+                <div className="flex gap-3">
+                  <img src={tree.image_url} alt={tree.name} className="w-16 h-16 object-cover rounded" />
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-sm sm:text-base truncate">{tree.name}</h3>
-                    {tree.species && <p className="text-green-600 text-xs sm:text-sm">{tree.species}</p>}
-                    <p className="text-gray-500 text-xs sm:text-sm mt-1">📍 {tree.latitude.toFixed(4)}, {tree.longitude.toFixed(4)}</p>
-                    <p className="text-gray-500 text-xs sm:text-sm">📅 {new Date(tree.planted_date).toLocaleDateString()}</p>
+                    <h3 className="font-bold text-sm truncate">{tree.name}</h3>
+                    <p className="text-gray-500 text-xs">📍 {tree.latitude.toFixed(4)}, {tree.longitude.toFixed(4)}</p>
+                    <p className="text-gray-500 text-xs">📅 {new Date(tree.planted_date).toLocaleDateString()}</p>
                   </div>
                 </div>
               </div>
@@ -185,6 +228,14 @@ function MapView({ trees, onTreeClick }: { trees: Tree[]; onTreeClick: (tree: Tr
           </div>
         )}
       </div>
+
+      {/* Map */}
+      {trees.length > 0 && (
+        <div className="bg-white rounded-xl p-4 sm:p-6 shadow">
+          <h2 className="text-xl sm:text-2xl font-bold mb-4">🗺️ Map View</h2>
+          <div ref={mapContainer} className="w-full h-[400px] sm:h-[500px] rounded-lg" />
+        </div>
+      )}
     </div>
   );
 }
