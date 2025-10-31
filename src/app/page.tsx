@@ -1,155 +1,60 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabase';
-import { Tree } from '@/types';
-import AuthButton from '@/components/AuthButton';
-import Map from '@/components/Map';
-import AddTreeForm from '@/components/AddTreeForm';
-import TreePopup from '@/components/TreePopup';
-import { User } from '@supabase/supabase-js';
 
 export default function Home() {
-  const [user, setUser] = useState<User | null>(null);
-  const [trees, setTrees] = useState<Tree[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [showAddForm, setShowAddForm] = useState(false);
-  const [selectedTree, setSelectedTree] = useState<Tree | null>(null);
+  const [step, setStep] = useState(1);
+  const [error, setError] = useState('');
+
+  const testStep = async (stepNum: number, testName: string, testFn: () => Promise<void>) => {
+    try {
+      await testFn();
+      console.log(`✅ Step ${stepNum}: ${testName} - OK`);
+      setStep(stepNum + 1);
+    } catch (err) {
+      setError(`❌ Step ${stepNum}: ${testName} - ${err}`);
+      console.error(`❌ Step ${stepNum}:`, err);
+    }
+  };
 
   useEffect(() => {
-    const getUser = async () => {
-      try {
-        const { data: { user } } = await supabase.auth.getUser();
-        setUser(user);
-      } catch (error) {
-        console.error('Auth error:', error);
-      } finally {
-        setLoading(false);
+    const runTests = async () => {
+      if (step === 1) {
+        await testStep(1, 'Import Supabase', async () => {
+          const { supabase } = await import('@/lib/supabase');
+        });
+      } else if (step === 2) {
+        await testStep(2, 'Import Types', async () => {
+          const { Tree } = await import('@/types');
+        });
+      } else if (step === 3) {
+        await testStep(3, 'Import AuthButton', async () => {
+          const AuthButton = await import('@/components/AuthButton');
+        });
+      } else if (step === 4) {
+        await testStep(4, 'Import Map', async () => {
+          const Map = await import('@/components/Map');
+        });
+      } else if (step === 5) {
+        await testStep(5, 'Import AddTreeForm', async () => {
+          const AddTreeForm = await import('@/components/AddTreeForm');
+        });
+      } else if (step === 6) {
+        await testStep(6, 'Import TreePopup', async () => {
+          const TreePopup = await import('@/components/TreePopup');
+        });
       }
     };
 
-    getUser();
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setUser(session?.user ?? null);
-      }
-    );
-
-    return () => subscription.unsubscribe();
-  }, []);
-
-  useEffect(() => {
-    if (user) {
-      fetchTrees();
-    }
-  }, [user]);
-
-  const fetchTrees = async () => {
-    if (!user) return;
-
-    const { data, error } = await supabase
-      .from('trees')
-      .select('*')
-      .eq('user_id', user.id)
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      console.error('Error fetching trees:', error);
-    } else {
-      setTrees(data || []);
-    }
-  };
-
-  const handleAddTreeSuccess = () => {
-    setShowAddForm(false);
-    fetchTrees();
-  };
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div>Loading...</div>
-      </div>
-    );
-  }
-
-  if (!user) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen p-4">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-green-500 mb-4">🌳 myTree</h1>
-          <p className="text-lg text-gray-600 mb-8">
-            Track your green impact around the world
-          </p>
-          <AuthButton />
-        </div>
-      </div>
-    );
-  }
+    runTests();
+  }, [step]);
 
   return (
-    <div className="min-h-screen">
-      <header className="bg-white shadow-sm p-4">
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold text-green-500">🌳 myTree</h1>
-            <span className="text-sm text-gray-500">
-              {trees.length} tree{trees.length !== 1 ? 's' : ''} planted
-            </span>
-          </div>
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => setShowAddForm(true)}
-              className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
-            >
-              + Add Tree
-            </button>
-            <AuthButton />
-          </div>
-        </div>
-      </header>
-
-      <main className="p-4">
-        <div className="max-w-6xl mx-auto">
-          {trees.length === 0 ? (
-            <div className="text-center py-12">
-              <div className="text-6xl mb-4">🌱</div>
-              <h2 className="text-2xl font-bold mb-4">Plant Your First Tree!</h2>
-              <p className="text-gray-600 mb-6">
-                Start building your personal forest by adding your first tree.
-              </p>
-              <button
-                onClick={() => setShowAddForm(true)}
-                className="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600"
-              >
-                Add Your First Tree
-              </button>
-            </div>
-          ) : (
-            <div className="h-[600px] rounded-lg overflow-hidden shadow-lg">
-              <Map 
-                trees={trees} 
-                onTreeClick={setSelectedTree}
-              />
-            </div>
-          )}
-        </div>
-      </main>
-
-      {showAddForm && (
-        <AddTreeForm
-          onSuccess={handleAddTreeSuccess}
-          onCancel={() => setShowAddForm(false)}
-        />
-      )}
-
-      {selectedTree && (
-        <TreePopup
-          tree={selectedTree}
-          onClose={() => setSelectedTree(null)}
-        />
-      )}
+    <div className="p-8">
+      <h1 className="text-2xl font-bold">Component Test</h1>
+      <p>Current step: {step}</p>
+      {error && <p className="text-red-500">{error}</p>}
+      {step > 6 && <p className="text-green-500">✅ All components imported successfully!</p>}
     </div>
   );
 }
