@@ -1,6 +1,5 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useState, useEffect, useRef } from 'react';
 
@@ -52,14 +51,14 @@ export default function Home() {
     setTotalTrees(count || 0);
   };
 
-  const fetchTrees = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
-    const { data, error } = await supabase.from('trees').select('*').eq('user_id', user.id).order('planted_date', { ascending: false });
-    console.log('✅ Fetched trees:', data?.length, 'trees');
-    if (data) setTrees(data);
-    setTrees(data || []);
-  };
+const fetchTrees = async () => {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return;
+  const { data, error } = await supabase.from('trees').select('*').eq('user_id', user.id).order('planted_date', { ascending: false });
+  console.log('✅ Fetched trees:', data?.length, 'trees');
+  setTrees(data || []);
+};
+
 
   const signIn = () => supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: 'https://leafybuddy.vercel.app' } });
   const signOut = () => supabase.auth.signOut();
