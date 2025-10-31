@@ -23,6 +23,8 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
   const [selectedTree, setSelectedTree] = useState<Tree | null>(null);
+  const [showProfile, setShowProfile] = useState(false);
+  const [view, setView] = useState<'dashboard' | 'map'>('dashboard');
 
   useEffect(() => {
     checkUser();
@@ -55,10 +57,7 @@ export default function Home() {
     setTrees(data || []);
   };
 
-  const signIn = () => {
-    const redirectUrl = typeof window !== 'undefined' ? window.location.origin : 'https://leafybuddy.vercel.app';
-    supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: redirectUrl } });
-  };
+  const signIn = () => supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: 'https://leafybuddy.vercel.app' } });
   const signOut = () => supabase.auth.signOut();
 
   if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="text-4xl animate-spin">🌱</div></div>;
@@ -88,49 +87,93 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
           <h1 className="text-2xl font-bold text-green-800">🌳 LeafyBuddy</h1>
           <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-600">{user.email}</span>
+            <button onClick={() => setView('dashboard')} className={`px-3 py-1 rounded ${view === 'dashboard' ? 'bg-green-100 text-green-800' : 'text-gray-600'}`}>Dashboard</button>
+            <button onClick={() => setView('map')} className={`px-3 py-1 rounded ${view === 'map' ? 'bg-green-100 text-green-800' : 'text-gray-600'}`}>Map</button>
+            <button onClick={() => setShowProfile(true)} className="text-gray-600 hover:text-green-600">Profile</button>
             <button onClick={signOut} className="text-red-600 hover:text-red-700">Sign Out</button>
           </div>
         </div>
       </nav>
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="flex justify-between items-center mb-8">
-          <h2 className="text-3xl font-bold">Your Trees ({trees.length})</h2>
-          <button onClick={() => setShowAddForm(true)} className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700">
-            + Add Tree
-          </button>
-        </div>
+      {view === 'dashboard' ? (
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div className="bg-white rounded-xl p-6 shadow">
+              <div className="text-3xl mb-2">🌳</div>
+              <div className="text-3xl font-bold text-green-600">{trees.length}</div>
+              <div className="text-gray-600">Your Trees</div>
+            </div>
+            <div className="bg-white rounded-xl p-6 shadow">
+              <div className="text-3xl mb-2">🌍</div>
+              <div className="text-3xl font-bold text-blue-600">{new Set(trees.map(t => `${Math.floor(t.latitude)},${Math.floor(t.longitude)}`)).size}</div>
+              <div className="text-gray-600">Locations</div>
+            </div>
+            <div className="bg-white rounded-xl p-6 shadow">
+              <div className="text-3xl mb-2">📅</div>
+              <div className="text-3xl font-bold text-purple-600">{trees.length > 0 ? Math.floor((Date.now() - new Date(trees[trees.length - 1].planted_date).getTime()) / (1000 * 60 * 60 * 24)) : 0}</div>
+              <div className="text-gray-600">Days Active</div>
+            </div>
+          </div>
 
-        {trees.length === 0 ? (
-          <div className="bg-white rounded-xl p-12 text-center">
-            <div className="text-6xl mb-4">🌱</div>
-            <h3 className="text-2xl font-bold mb-4">Plant Your First Tree!</h3>
-            <button onClick={() => setShowAddForm(true)} className="bg-green-600 text-white px-8 py-3 rounded-lg hover:bg-green-700">
-              Add Your First Tree
-            </button>
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-3xl font-bold">Your Trees ({trees.length})</h2>
+            <button onClick={() => setShowAddForm(true)} className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700">+ Add Tree</button>
           </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {trees.map(tree => (
-              <div key={tree.id} className="bg-white rounded-xl shadow overflow-hidden hover:shadow-lg transition">
-                <img src={tree.image_url} alt={tree.name} className="w-full h-48 object-cover" />
-                <div className="p-4">
-                  <h3 className="font-bold text-lg">{tree.name}</h3>
-                  {tree.species && <p className="text-green-600 text-sm">{tree.species}</p>}
-                  <p className="text-gray-500 text-sm mt-2">📅 {new Date(tree.planted_date).toLocaleDateString()}</p>
-                  <button onClick={() => setSelectedTree(tree)} className="mt-3 w-full bg-gray-100 py-2 rounded hover:bg-gray-200">
-                    View Details
-                  </button>
+
+          {trees.length === 0 ? (
+            <div className="bg-white rounded-xl p-12 text-center">
+              <div className="text-6xl mb-4">🌱</div>
+              <h3 className="text-2xl font-bold mb-4">Plant Your First Tree!</h3>
+              <button onClick={() => setShowAddForm(true)} className="bg-green-600 text-white px-8 py-3 rounded-lg hover:bg-green-700">Add Your First Tree</button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {trees.map(tree => (
+                <div key={tree.id} className="bg-white rounded-xl shadow overflow-hidden hover:shadow-lg transition">
+                  <img src={tree.image_url} alt={tree.name} className="w-full h-48 object-cover" />
+                  <div className="p-4">
+                    <h3 className="font-bold text-lg">{tree.name}</h3>
+                    {tree.species && <p className="text-green-600 text-sm">{tree.species}</p>}
+                    <p className="text-gray-500 text-sm mt-2">📅 {new Date(tree.planted_date).toLocaleDateString()}</p>
+                    <button onClick={() => setSelectedTree(tree)} className="mt-3 w-full bg-gray-100 py-2 rounded hover:bg-gray-200">View Details</button>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+              ))}
+            </div>
+          )}
+        </div>
+      ) : (
+        <MapView trees={trees} onTreeClick={setSelectedTree} />
+      )}
 
       {showAddForm && <AddTreeForm onClose={() => setShowAddForm(false)} onSuccess={() => { setShowAddForm(false); fetchTrees(); }} />}
       {selectedTree && <TreeModal tree={selectedTree} onClose={() => setSelectedTree(null)} />}
+      {showProfile && <ProfileModal user={user} trees={trees} onClose={() => setShowProfile(false)} />}
+    </div>
+  );
+}
+
+function MapView({ trees, onTreeClick }: { trees: Tree[]; onTreeClick: (tree: Tree) => void }) {
+  return (
+    <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="bg-white rounded-xl p-8 shadow">
+        <h2 className="text-2xl font-bold mb-6">🗺️ Your Trees on Map</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {trees.map(tree => (
+            <div key={tree.id} className="border rounded-lg p-4 hover:shadow-lg transition cursor-pointer" onClick={() => onTreeClick(tree)}>
+              <div className="flex gap-4">
+                <img src={tree.image_url} alt={tree.name} className="w-24 h-24 object-cover rounded" />
+                <div className="flex-1">
+                  <h3 className="font-bold">{tree.name}</h3>
+                  {tree.species && <p className="text-green-600 text-sm">{tree.species}</p>}
+                  <p className="text-gray-500 text-sm mt-1">📍 {tree.latitude.toFixed(4)}, {tree.longitude.toFixed(4)}</p>
+                  <p className="text-gray-500 text-sm">📅 {new Date(tree.planted_date).toLocaleDateString()}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
@@ -170,7 +213,7 @@ function AddTreeForm({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-xl p-6 w-full max-w-md">
+      <div className="bg-white rounded-xl p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between mb-4">
           <h3 className="text-xl font-bold">Add New Tree</h3>
           <button onClick={onClose} className="text-2xl">&times;</button>
@@ -196,9 +239,19 @@ function AddTreeForm({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
 }
 
 function TreeModal({ tree, onClose }: { tree: Tree; onClose: () => void }) {
+  const shareTree = () => {
+    const text = `Check out my tree "${tree.name}" on LeafyBuddy! 🌳`;
+    if (navigator.share) {
+      navigator.share({ title: tree.name, text, url: window.location.href });
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      alert('Link copied to clipboard!');
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-xl p-6 w-full max-w-md">
+      <div className="bg-white rounded-xl p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between mb-4">
           <h3 className="text-xl font-bold">{tree.name}</h3>
           <button onClick={onClose} className="text-2xl">&times;</button>
@@ -208,7 +261,77 @@ function TreeModal({ tree, onClose }: { tree: Tree; onClose: () => void }) {
         <p className="mb-2"><strong>Planted:</strong> {new Date(tree.planted_date).toLocaleDateString()}</p>
         <p className="mb-2"><strong>Location:</strong> {tree.latitude.toFixed(4)}, {tree.longitude.toFixed(4)}</p>
         {tree.description && <p className="mt-4"><strong>Story:</strong> {tree.description}</p>}
-        <button onClick={onClose} className="w-full mt-6 p-3 bg-gray-500 text-white rounded hover:bg-gray-600">Close</button>
+        <div className="bg-green-50 rounded-lg p-4 mt-4">
+          <h4 className="font-semibold mb-2">🌍 Environmental Impact</h4>
+          <div className="grid grid-cols-2 gap-3 text-sm">
+            <div className="text-center">
+              <div className="font-bold text-green-600">~20kg</div>
+              <div className="text-gray-600">CO₂/year</div>
+            </div>
+            <div className="text-center">
+              <div className="font-bold text-blue-600">~260L</div>
+              <div className="text-gray-600">O₂/day</div>
+            </div>
+          </div>
+        </div>
+        <div className="flex gap-3 mt-6">
+          <button onClick={shareTree} className="flex-1 p-3 bg-blue-600 text-white rounded hover:bg-blue-700">🔗 Share</button>
+          <button onClick={onClose} className="flex-1 p-3 bg-gray-500 text-white rounded hover:bg-gray-600">Close</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ProfileModal({ user, trees, onClose }: { user: any; trees: Tree[]; onClose: () => void }) {
+  const stats = {
+    totalTrees: trees.length,
+    locations: new Set(trees.map(t => `${Math.floor(t.latitude)},${Math.floor(t.longitude)}`)).size,
+    daysActive: trees.length > 0 ? Math.floor((Date.now() - new Date(trees[trees.length - 1].planted_date).getTime()) / (1000 * 60 * 60 * 24)) : 0,
+    favoriteSpecies: trees.filter(t => t.species).reduce((acc, t) => { acc[t.species!] = (acc[t.species!] || 0) + 1; return acc; }, {} as Record<string, number>)
+  };
+  const topSpecies = Object.entries(stats.favoriteSpecies).sort(([,a], [,b]) => b - a)[0]?.[0] || 'None';
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+      <div className="bg-white rounded-xl p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
+        <div className="flex justify-between mb-6">
+          <h3 className="text-xl font-bold">👤 Profile</h3>
+          <button onClick={onClose} className="text-2xl">&times;</button>
+        </div>
+        <div className="text-center mb-6">
+          <div className="text-5xl mb-2">🌳</div>
+          <h4 className="font-bold text-lg">{user.user_metadata?.name || 'Tree Planter'}</h4>
+          <p className="text-gray-600 text-sm">{user.email}</p>
+        </div>
+        <div className="grid grid-cols-2 gap-4 mb-6">
+          <div className="bg-green-50 rounded-lg p-4 text-center">
+            <div className="text-2xl font-bold text-green-600">{stats.totalTrees}</div>
+            <div className="text-sm text-gray-600">Trees</div>
+          </div>
+          <div className="bg-blue-50 rounded-lg p-4 text-center">
+            <div className="text-2xl font-bold text-blue-600">{stats.locations}</div>
+            <div className="text-sm text-gray-600">Locations</div>
+          </div>
+          <div className="bg-purple-50 rounded-lg p-4 text-center">
+            <div className="text-2xl font-bold text-purple-600">{stats.daysActive}</div>
+            <div className="text-sm text-gray-600">Days Active</div>
+          </div>
+          <div className="bg-yellow-50 rounded-lg p-4 text-center">
+            <div className="text-sm font-bold text-yellow-600 truncate">{topSpecies}</div>
+            <div className="text-sm text-gray-600">Top Species</div>
+          </div>
+        </div>
+        <div className="mb-6">
+          <h4 className="font-semibold mb-3">🏆 Achievements</h4>
+          <div className="space-y-2 text-sm">
+            {stats.totalTrees >= 1 && <div className="flex items-center gap-2"><span>🌱</span><span>First Tree Planted</span></div>}
+            {stats.totalTrees >= 5 && <div className="flex items-center gap-2"><span>🌳</span><span>Tree Enthusiast (5+ trees)</span></div>}
+            {stats.totalTrees >= 10 && <div className="flex items-center gap-2"><span>🌲</span><span>Forest Builder (10+ trees)</span></div>}
+            {stats.locations >= 3 && <div className="flex items-center gap-2"><span>🌍</span><span>Global Planter (3+ locations)</span></div>}
+          </div>
+        </div>
+        <button onClick={onClose} className="w-full p-3 bg-green-600 text-white rounded hover:bg-green-700">Close</button>
       </div>
     </div>
   );
