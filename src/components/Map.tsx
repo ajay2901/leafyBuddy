@@ -44,8 +44,7 @@ export default function Map({ trees, onTreeClick }: MapProps) {
       positionOptions: {
         enableHighAccuracy: true
       },
-      trackUserLocation: true,
-      showUserHeading: true
+      trackUserLocation: true
     });
     map.current.addControl(geolocate, 'top-right');
 
