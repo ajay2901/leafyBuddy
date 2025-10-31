@@ -158,8 +158,6 @@ export default function Home() {
   );
 }
 
-{showAddForm && <AddTreeForm onClose={() => setShowAddForm(false)} onSuccess={async () => { setShowAddForm(false); await fetchTrees(); alert('✅ Tree added successfully!'); }} />}
-
 function MapView({ trees, onTreeClick }: { trees: Tree[]; onTreeClick: (tree: Tree) => void }) {
   return (
     <div className="max-w-7xl mx-auto px-4 py-6 sm:py-8">
