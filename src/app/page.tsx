@@ -242,7 +242,9 @@ function MapView({ trees, onTreeClick }: { trees: Tree[]; onTreeClick: (tree: Tr
 function AddTreeForm({ onClose, onSuccess }: { onClose: () => void; onSuccess: () => void }) {
   const [loading, setLoading] = useState(false);
   const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
-  const [form, setForm] = useState({ name: '', species: '', imageUrl: '', description: '' });
+  const [form, setForm] = useState({ name: '', species: '', description: '' });
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>('');
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -250,19 +252,46 @@ function AddTreeForm({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
     }
   }, []);
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImageFile(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!location || !form.name || !form.imageUrl) return alert('Please fill required fields and wait for location');
+    if (!location || !form.name || !imageFile) return alert('Please fill required fields');
     
     setLoading(true);
     const { data: { user } } = await supabase.auth.getUser();
+    
+    // Upload image to Supabase Storage
+    const fileExt = imageFile.name.split('.').pop();
+    const fileName = `${user!.id}/${Date.now()}.${fileExt}`;
+    const { error: uploadError } = await supabase.storage
+      .from('tree-images')
+      .upload(fileName, imageFile);
+    
+    if (uploadError) {
+      setLoading(false);
+      return alert('Error uploading image: ' + uploadError.message);
+    }
+
+    // Get public URL
+    const { data: { publicUrl } } = supabase.storage
+      .from('tree-images')
+      .getPublicUrl(fileName);
+
+    // Insert tree record
     const { error } = await supabase.from('trees').insert({
       user_id: user!.id,
       name: form.name,
       species: form.species || null,
       latitude: location.lat,
       longitude: location.lng,
-      image_url: form.imageUrl,
+      image_url: publicUrl,
       description: form.description || null,
       planted_date: new Date().toISOString()
     });
@@ -282,7 +311,14 @@ function AddTreeForm({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
         <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
           <input required placeholder="Tree Name *" value={form.name} onChange={e => setForm({...form, name: e.target.value})} className="w-full p-2 sm:p-3 border rounded text-sm sm:text-base" />
           <input placeholder="Species" value={form.species} onChange={e => setForm({...form, species: e.target.value})} className="w-full p-2 sm:p-3 border rounded text-sm sm:text-base" />
-          <input required type="url" placeholder="Image URL * (e.g., from Imgur)" value={form.imageUrl} onChange={e => setForm({...form, imageUrl: e.target.value})} className="w-full p-2 sm:p-3 border rounded text-sm sm:text-base" />
+          
+          {/* Image Upload */}
+          <div>
+            <label className="block text-sm font-medium mb-2">Tree Photo *</label>
+            <input required type="file" accept="image/*" onChange={handleImageChange} className="w-full p-2 border rounded text-sm" />
+            {imagePreview && <img src={imagePreview} alt="Preview" className="mt-2 w-full h-32 object-cover rounded" />}
+          </div>
+
           <textarea placeholder="Description" value={form.description} onChange={e => setForm({...form, description: e.target.value})} className="w-full p-2 sm:p-3 border rounded text-sm sm:text-base" rows={3} />
           <div className={`p-2 sm:p-3 rounded text-xs sm:text-sm ${location ? 'bg-green-50 text-green-700' : 'bg-gray-100 text-gray-600'}`}>
             {location ? `📍 Location: ${location.lat.toFixed(4)}, ${location.lng.toFixed(4)}` : '📍 Getting location...'}
@@ -299,6 +335,9 @@ function AddTreeForm({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
   );
 }
 
+
+ 
+
 function TreeModal({ tree, onClose }: { tree: Tree; onClose: () => void }) {
   const shareTree = () => {
     const text = `Check out my tree "${tree.name}" on LeafyBuddy! 🌳`;
@@ -309,6 +348,8 @@ function TreeModal({ tree, onClose }: { tree: Tree; onClose: () => void }) {
       alert('Link copied to clipboard!');
     }
   };
+
+
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
@@ -352,7 +393,15 @@ function ProfileModal({ user, trees, daysActive, onClose }: { user: any; trees: 
     favoriteSpecies: trees.filter(t => t.species).reduce((acc, t) => { acc[t.species!] = (acc[t.species!] || 0) + 1; return acc; }, {} as Record<string, number>)
   };
   const topSpecies = Object.entries(stats.favoriteSpecies).sort(([,a], [,b]) => b - a)[0]?.[0] || 'None';
-
+    const shareForest = () => {
+    const url = `${window.location.origin}/forest/${user.id}`;
+    if (navigator.share) {
+      navigator.share({ title: 'My Forest', text: 'Check out my trees!', url });
+    } else {
+      navigator.clipboard.writeText(url);
+      alert('Forest link copied!');
+    }
+  };
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-xl p-4 sm:p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
@@ -392,6 +441,7 @@ function ProfileModal({ user, trees, daysActive, onClose }: { user: any; trees: 
             {stats.locations >= 3 && <div className="flex items-center gap-2"><span>🌍</span><span>Global Planter (3+ locations)</span></div>}
           </div>
         </div>
+        <button onClick={shareForest} className="w-full p-3 bg-blue-600 text-white rounded hover:bg-blue-700 mb-2">🔗 Share My Forest</button>
         <button onClick={onClose} className="w-full p-2 sm:p-3 bg-green-600 text-white rounded hover:bg-green-700 text-sm sm:text-base">Close</button>
       </div>
     </div>
