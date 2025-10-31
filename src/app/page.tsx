@@ -16,11 +16,11 @@ interface Tree {
   planted_date: string;
   created_at: string;
 }
-
 export default function Home() {
   const [user, setUser] = useState<any>(null);
   const [trees, setTrees] = useState<Tree[]>([]);
   const [totalTrees, setTotalTrees] = useState(0);
+  const [globalUsers, setGlobalUsers] = useState(0);
   const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
   const [selectedTree, setSelectedTree] = useState<Tree | null>(null);
@@ -30,6 +30,7 @@ export default function Home() {
   useEffect(() => {
     checkUser();
     fetchTotalTrees();
+    fetchGlobalStats();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       setUser(session?.user ?? null);
@@ -51,14 +52,19 @@ export default function Home() {
     setTotalTrees(count || 0);
   };
 
-const fetchTrees = async () => {
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return;
-  const { data, error } = await supabase.from('trees').select('*').eq('user_id', user.id).order('planted_date', { ascending: false });
-  console.log('✅ Fetched trees:', data?.length, 'trees');
-  setTrees(data || []);
-};
+  const fetchGlobalStats = async () => {
+    const { data } = await supabase.from('trees').select('user_id');
+    const uniqueUsers = new Set(data?.map(t => t.user_id)).size;
+    setGlobalUsers(uniqueUsers);
+  };
 
+  const fetchTrees = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+    const { data } = await supabase.from('trees').select('*').eq('user_id', user.id).order('planted_date', { ascending: false });
+    console.log('✅ Fetched trees:', data?.length, 'trees');
+    setTrees(data || []);
+  };
 
   const signIn = () => supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: 'https://leafybuddy.vercel.app' } });
   const signOut = () => supabase.auth.signOut();
@@ -72,21 +78,77 @@ const fetchTrees = async () => {
   if (!user) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
-        <div className="max-w-4xl mx-auto px-4 py-12 sm:py-20 text-center">
-          <h1 className="text-5xl sm:text-6xl mb-4">🌳</h1>
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">LeafyBuddy</h2>
-          <p className="text-lg sm:text-xl text-gray-600 mb-8">Track your trees around the world</p>
-          <div className="bg-white rounded-xl p-6 sm:p-8 shadow-lg mb-8">
-            <div className="text-4xl sm:text-5xl font-bold text-green-600 mb-2">{totalTrees}</div>
-            <div className="text-gray-600">Trees Planted Globally</div>
+        <div className="max-w-6xl mx-auto px-4 py-12 sm:py-20">
+          <div className="text-center mb-12">
+            <h1 className="text-5xl sm:text-6xl mb-4">🌳</h1>
+            <h2 className="text-4xl sm:text-5xl font-bold mb-4">LeafyBuddy</h2>
+            <p className="text-xl sm:text-2xl text-gray-600 mb-8">Track your trees around the world</p>
           </div>
-          <button onClick={signIn} className="bg-green-600 text-white px-6 sm:px-8 py-3 rounded-lg text-base sm:text-lg hover:bg-green-700 w-full sm:w-auto">
-            Sign In with Google
-          </button>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div className="bg-white rounded-xl p-8 shadow-lg text-center">
+              <div className="text-5xl font-bold text-green-600 mb-2">{totalTrees.toLocaleString()}</div>
+              <div className="text-gray-600 font-medium">Trees Planted</div>
+              <div className="text-sm text-gray-500 mt-2">🌍 Worldwide</div>
+            </div>
+            <div className="bg-white rounded-xl p-8 shadow-lg text-center">
+              <div className="text-5xl font-bold text-blue-600 mb-2">{globalUsers.toLocaleString()}+</div>
+              <div className="text-gray-600 font-medium">Eco-Warriors</div>
+              <div className="text-sm text-gray-500 mt-2">👥 Active Users</div>
+            </div>
+            <div className="bg-white rounded-xl p-8 shadow-lg text-center">
+              <div className="text-5xl font-bold text-purple-600 mb-2">{(totalTrees * 20).toLocaleString()}kg</div>
+              <div className="text-gray-600 font-medium">CO₂ Absorbed</div>
+              <div className="text-sm text-gray-500 mt-2">🌱 Per Year</div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-xl p-8 shadow-lg mb-8">
+            <h3 className="text-2xl font-bold text-center mb-6">Why Join LeafyBuddy?</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="flex gap-4">
+                <div className="text-3xl">📍</div>
+                <div>
+                  <h4 className="font-bold mb-1">Track Your Impact</h4>
+                  <p className="text-gray-600 text-sm">Auto-location detection and interactive maps</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <div className="text-3xl">🏆</div>
+                <div>
+                  <h4 className="font-bold mb-1">Earn Achievements</h4>
+                  <p className="text-gray-600 text-sm">Unlock badges as you plant more trees</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <div className="text-3xl">🔗</div>
+                <div>
+                  <h4 className="font-bold mb-1">Share Your Forest</h4>
+                  <p className="text-gray-600 text-sm">Inspire others with your green journey</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <div className="text-3xl">📊</div>
+                <div>
+                  <h4 className="font-bold mb-1">See Your Stats</h4>
+                  <p className="text-gray-600 text-sm">Track trees, locations, and days active</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="text-center">
+            <button onClick={signIn} className="bg-green-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-green-700 shadow-lg">
+              🚀 Start Your Green Journey
+            </button>
+            <p className="text-gray-500 text-sm mt-4">Free forever • No credit card required</p>
+          </div>
         </div>
       </div>
     );
   }
+  // ... rest of authenticated user UI
+
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -349,7 +411,10 @@ function TreeModal({ tree, onClose }: { tree: Tree; onClose: () => void }) {
     }
   };
 
-
+  const copyLink = () => {
+  navigator.clipboard.writeText(`${window.location.origin}/tree/${tree.id}`);
+  alert('🔗 Link copied to clipboard!');
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
@@ -378,6 +443,7 @@ function TreeModal({ tree, onClose }: { tree: Tree; onClose: () => void }) {
         </div>
         <div className="flex gap-2 sm:gap-3 mt-4 sm:mt-6">
           <button onClick={shareTree} className="flex-1 p-2 sm:p-3 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm sm:text-base">🔗 Share</button>
+          <button onClick={copyLink} className="flex-1 p-2 sm:p-3 bg-gray-600 text-white rounded hover:bg-gray-700 text-sm sm:text-base">📋 Copy Link</button>
           <button onClick={onClose} className="flex-1 p-2 sm:p-3 bg-gray-500 text-white rounded hover:bg-gray-600 text-sm sm:text-base">Close</button>
         </div>
       </div>
@@ -402,6 +468,11 @@ function ProfileModal({ user, trees, daysActive, onClose }: { user: any; trees: 
       alert('Forest link copied!');
     }
   };
+  const copyForestLink = () => {
+  navigator.clipboard.writeText(`${window.location.origin}/forest/${user.id}`);
+  alert('🔗 Forest link copied!');
+  };
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-xl p-4 sm:p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
@@ -442,6 +513,7 @@ function ProfileModal({ user, trees, daysActive, onClose }: { user: any; trees: 
           </div>
         </div>
         <button onClick={shareForest} className="w-full p-3 bg-blue-600 text-white rounded hover:bg-blue-700 mb-2">🔗 Share My Forest</button>
+        <button onClick={copyForestLink} className="w-full p-2 sm:p-3 bg-gray-600 text-white rounded hover:bg-gray-700 mb-2 text-sm sm:text-base">📋 Copy Forest Link</button>
         <button onClick={onClose} className="w-full p-2 sm:p-3 bg-green-600 text-white rounded hover:bg-green-700 text-sm sm:text-base">Close</button>
       </div>
     </div>

@@ -16,6 +16,7 @@ interface Tree {
 
 export default function ForestPage({ params }: { params: { userId: string } }) {
   const [trees, setTrees] = useState<Tree[]>([]);
+  const [userName, setUserName] = useState<string>('Tree Planter');
   const [loading, setLoading] = useState(true);
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<any>(null);
@@ -51,6 +52,11 @@ export default function ForestPage({ params }: { params: { userId: string } }) {
   const fetchUserTrees = async () => {
     const { data } = await supabase.from('trees').select('*').eq('user_id', params.userId).order('planted_date', { ascending: false });
     setTrees(data || []);
+    // Get username from first tree's user metadata (stored when tree was created)
+    if (data && data.length > 0) {
+      // Try to get user info from public profile or use default
+      setUserName('Tree Planter'); // Default for now - can be enhanced later
+    }
     setLoading(false);
   };
 
@@ -65,12 +71,16 @@ export default function ForestPage({ params }: { params: { userId: string } }) {
       <nav className="bg-white shadow">
         <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
           <Link href="/" className="text-2xl font-bold text-green-800">🌳 LeafyBuddy</Link>
-          <Link href="/" className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">Join LeafyBuddy</Link>
+          <div className="flex gap-2">
+            <button onClick={() => { navigator.clipboard.writeText(window.location.href); alert('🔗 Link copied!'); }} className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">📋 Copy Link</button>
+            <Link href="/" className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">Join LeafyBuddy</Link>
+          </div>
         </div>
       </nav>
 
       <div className="max-w-7xl mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-6">🌲 Forest Dashboard</h1>
+        <h1 className="text-3xl font-bold mb-2">🌲 {userName}'s Forest</h1>
+        <p className="text-gray-600 mb-6">{trees.length} trees planted across {uniqueLocations} locations</p>
         
         {/* Stats */}
         <div className="grid grid-cols-3 gap-6 mb-8">

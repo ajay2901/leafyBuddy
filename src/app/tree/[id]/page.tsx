@@ -12,6 +12,7 @@ interface PageProps {
 
 export default function TreePage({ params }: PageProps) {
   const [tree, setTree] = useState<Tree | null>(null);
+  const [userName, setUserName] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -19,25 +20,21 @@ export default function TreePage({ params }: PageProps) {
     fetchTree();
   }, [params.id]);
 
-  const fetchTree = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('trees')
-        .select('*')
-        .eq('id', params.id)
-        .single();
-
-      if (error) {
-        setError('Tree not found');
-      } else {
-        setTree(data);
-      }
-    } catch (err) {
-      setError('Failed to load tree');
-    } finally {
-      setLoading(false);
+const fetchTree = async () => {
+  try {
+    const { data, error } = await supabase.from('trees').select('*').eq('id', params.id).single();
+    if (error) {
+      setError('Tree not found');
+    } else {
+      setTree(data);
+      setUserName('Tree Planter'); // Default - can't access admin API in client
     }
-  };
+  } catch (err) {
+    setError('Failed to load tree');
+  } finally {
+    setLoading(false);
+  }
+};
 
   const shareTree = async () => {
     const shareData = {
@@ -102,6 +99,11 @@ export default function TreePage({ params }: PageProps) {
               <h1 className="text-2xl font-bold text-green-800">LeafyBuddy</h1>
             </Link>
             <div className="flex items-center space-x-4">
+              <button onClick={() => { navigator.clipboard.writeText(window.location.href); alert('Link copied!'); }} className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 flex items-center space-x-2">
+                <span>📋</span>
+                <span>Copy Link</span>
+              </button>
+
               <button
                 onClick={shareTree}
                 className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
@@ -131,6 +133,8 @@ export default function TreePage({ params }: PageProps) {
             />
             <div className="p-6">
               <h2 className="text-3xl font-bold text-gray-800 mb-2">{tree.name}</h2>
+              <p className="text-sm text-gray-500 mb-3">Planted by {userName}</p>
+
               
               {tree.species && (
                 <div className="flex items-center space-x-2 mb-3">
