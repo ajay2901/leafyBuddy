@@ -1,60 +1,59 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 export default function Home() {
-  const [step, setStep] = useState(1);
+  const [currentTest, setCurrentTest] = useState('basic');
   const [error, setError] = useState('');
 
-  const testStep = async (stepNum: number, testName: string, testFn: () => Promise<void>) => {
+  const TestAuthButton = () => {
     try {
-      await testFn();
-      console.log(`✅ Step ${stepNum}: ${testName} - OK`);
-      setStep(stepNum + 1);
+      const AuthButton = require('@/components/AuthButton').default;
+      return <AuthButton />;
     } catch (err) {
-      setError(`❌ Step ${stepNum}: ${testName} - ${err}`);
-      console.error(`❌ Step ${stepNum}:`, err);
+      return <div className="text-red-500">AuthButton Error: {String(err)}</div>;
     }
   };
 
-  useEffect(() => {
-    const runTests = async () => {
-      if (step === 1) {
-        await testStep(1, 'Import Supabase', async () => {
-          const { supabase } = await import('@/lib/supabase');
-        });
-      } else if (step === 2) {
-        await testStep(2, 'Import Types', async () => {
-          const { Tree } = await import('@/types');
-        });
-      } else if (step === 3) {
-        await testStep(3, 'Import AuthButton', async () => {
-          const AuthButton = await import('@/components/AuthButton');
-        });
-      } else if (step === 4) {
-        await testStep(4, 'Import Map', async () => {
-          const Map = await import('@/components/Map');
-        });
-      } else if (step === 5) {
-        await testStep(5, 'Import AddTreeForm', async () => {
-          const AddTreeForm = await import('@/components/AddTreeForm');
-        });
-      } else if (step === 6) {
-        await testStep(6, 'Import TreePopup', async () => {
-          const TreePopup = await import('@/components/TreePopup');
-        });
-      }
-    };
-
-    runTests();
-  }, [step]);
+  const TestMap = () => {
+    try {
+      const Map = require('@/components/Map').default;
+      return <Map trees={[]} />;
+    } catch (err) {
+      return <div className="text-red-500">Map Error: {String(err)}</div>;
+    }
+  };
 
   return (
     <div className="p-8">
       <h1 className="text-2xl font-bold">Component Test</h1>
-      <p>Current step: {step}</p>
-      {error && <p className="text-red-500">{error}</p>}
-      {step > 6 && <p className="text-green-500">✅ All components imported successfully!</p>}
+      
+      <div className="space-y-4 mt-4">
+        <button 
+          onClick={() => setCurrentTest('basic')}
+          className="px-4 py-2 bg-blue-500 text-white rounded mr-2"
+        >
+          Basic Test
+        </button>
+        <button 
+          onClick={() => setCurrentTest('auth')}
+          className="px-4 py-2 bg-green-500 text-white rounded mr-2"
+        >
+          Test AuthButton
+        </button>
+        <button 
+          onClick={() => setCurrentTest('map')}
+          className="px-4 py-2 bg-red-500 text-white rounded mr-2"
+        >
+          Test Map
+        </button>
+      </div>
+
+      <div className="mt-8 p-4 border">
+        {currentTest === 'basic' && <div>✅ Basic page works!</div>}
+        {currentTest === 'auth' && <TestAuthButton />}
+        {currentTest === 'map' && <TestMap />}
+      </div>
     </div>
   );
 }

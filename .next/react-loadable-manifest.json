@@ -18,42 +18,5 @@
   "..\\node_modules\\@supabase\\storage-js\\dist\\module\\lib\\vectors\\helpers.js -> @supabase/node-fetch": {
     "id": "..\\node_modules\\@supabase\\storage-js\\dist\\module\\lib\\vectors\\helpers.js -> @supabase/node-fetch",
     "files": []
-  },
-  "app\\page.tsx -> @/components/AddTreeForm": {
-    "id": "app\\page.tsx -> @/components/AddTreeForm",
-    "files": [
-      "static/chunks/_app-pages-browser_src_components_AddTreeForm_tsx.js"
-    ]
-  },
-  "app\\page.tsx -> @/components/AuthButton": {
-    "id": "app\\page.tsx -> @/components/AuthButton",
-    "files": [
-      "static/chunks/_app-pages-browser_src_components_AuthButton_tsx.js"
-    ]
-  },
-  "app\\page.tsx -> @/components/Map": {
-    "id": "app\\page.tsx -> @/components/Map",
-    "files": [
-      "static/css/_app-pages-browser_src_components_Map_tsx.css",
-      "static/chunks/_app-pages-browser_src_components_Map_tsx.js"
-    ]
-  },
-  "app\\page.tsx -> @/components/TreePopup": {
-    "id": "app\\page.tsx -> @/components/TreePopup",
-    "files": [
-      "static/chunks/_app-pages-browser_src_components_TreePopup_tsx.js"
-    ]
-  },
-  "app\\page.tsx -> @/lib/supabase": {
-    "id": "app\\page.tsx -> @/lib/supabase",
-    "files": [
-      "static/chunks/_app-pages-browser_src_lib_supabase_ts.js"
-    ]
-  },
-  "app\\page.tsx -> @/types": {
-    "id": "app\\page.tsx -> @/types",
-    "files": [
-      "static/chunks/_app-pages-browser_src_types_index_ts.js"
-    ]
   }
 }
