@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-import { getFirebaseStorage } from '@/lib/firebase';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+// import { getFirebaseStorage } from '@/lib/firebase';
+// import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import imageCompression from 'browser-image-compression';
 
 interface AddTreeFormProps {
@@ -66,7 +66,59 @@ export default function AddTreeForm({ onSuccess, onCancel }: AddTreeFormProps) {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   if (!location || !formData.image || !formData.name.trim()) {
+  //     alert('Please fill in all required fields');
+  //     return;
+  //   }
+
+  //   setLoading(true);
+
+  //   try {
+  //     // Get current user
+  //     const { data: { user } } = await supabase.auth.getUser();
+  //     if (!user) throw new Error('Not authenticated');
+
+  //     // Compress and upload image
+  //     const compressedImage = await imageCompression(formData.image, {
+  //       maxSizeMB: 1,
+  //       maxWidthOrHeight: 1024,
+  //       useWebWorker: true,
+  //     });
+
+  //     const storage = getFirebaseStorage();
+  //     if (!storage) throw new Error('Storage not available');
+  //     const imageRef = ref(storage, `trees/${user.id}/${Date.now()}_${formData.image.name}`);
+
+  //     const snapshot = await uploadBytes(imageRef, compressedImage);
+  //     const imageUrl = await getDownloadURL(snapshot.ref);
+
+  //     // Save to database
+  //     const { error } = await supabase
+  //       .from('trees')
+  //       .insert({
+  //         user_id: user.id,
+  //         name: formData.name.trim(),
+  //         species: formData.species.trim() || null,
+  //         latitude: location.lat,
+  //         longitude: location.lng,
+  //         image_url: imageUrl,
+  //         description: formData.description.trim() || null,
+  //         planted_date: new Date().toISOString(),
+  //       });
+
+  //     if (error) throw error;
+
+  //     onSuccess();
+  //   } catch (error) {
+  //     console.error('Error adding tree:', error);
+  //     alert('Failed to add tree. Please try again.');
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+    const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!location || !formData.image || !formData.name.trim()) {
       alert('Please fill in all required fields');
@@ -76,17 +128,19 @@ export default function AddTreeForm({ onSuccess, onCancel }: AddTreeFormProps) {
     setLoading(true);
 
     try {
-      // Get current user
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
 
-      // Compress and upload image
       const compressedImage = await imageCompression(formData.image, {
         maxSizeMB: 1,
         maxWidthOrHeight: 1024,
         useWebWorker: true,
       });
 
+      // Dynamic import of Firebase
+      const { getFirebaseStorage } = await import('@/lib/firebase');
+      const { ref, uploadBytes, getDownloadURL } = await import('firebase/storage');
+      
       const storage = getFirebaseStorage();
       if (!storage) throw new Error('Storage not available');
       const imageRef = ref(storage, `trees/${user.id}/${Date.now()}_${formData.image.name}`);
@@ -94,7 +148,6 @@ export default function AddTreeForm({ onSuccess, onCancel }: AddTreeFormProps) {
       const snapshot = await uploadBytes(imageRef, compressedImage);
       const imageUrl = await getDownloadURL(snapshot.ref);
 
-      // Save to database
       const { error } = await supabase
         .from('trees')
         .insert({
@@ -118,6 +171,7 @@ export default function AddTreeForm({ onSuccess, onCancel }: AddTreeFormProps) {
       setLoading(false);
     }
   };
+
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
