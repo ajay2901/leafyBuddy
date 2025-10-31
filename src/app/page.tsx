@@ -55,7 +55,10 @@ export default function Home() {
     setTrees(data || []);
   };
 
-  const signIn = () => supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.origin } });
+  const signIn = () => {
+    const redirectUrl = typeof window !== 'undefined' ? window.location.origin : 'https://leafybuddy.vercel.app';
+    supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: redirectUrl } });
+  };
   const signOut = () => supabase.auth.signOut();
 
   if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="text-4xl animate-spin">🌱</div></div>;
