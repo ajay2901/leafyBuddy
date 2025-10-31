@@ -18,17 +18,5 @@
   "..\\node_modules\\@supabase\\storage-js\\dist\\module\\lib\\vectors\\helpers.js -> @supabase/node-fetch": {
     "id": "..\\node_modules\\@supabase\\storage-js\\dist\\module\\lib\\vectors\\helpers.js -> @supabase/node-fetch",
     "files": []
-  },
-  "components\\AddTreeForm.tsx -> @/lib/firebase": {
-    "id": "components\\AddTreeForm.tsx -> @/lib/firebase",
-    "files": [
-      "static/chunks/_app-pages-browser_src_lib_firebase_ts.js"
-    ]
-  },
-  "components\\AddTreeForm.tsx -> firebase/storage": {
-    "id": "components\\AddTreeForm.tsx -> firebase/storage",
-    "files": [
-      "static/chunks/_app-pages-browser_node_modules_firebase_storage_dist_esm_index_esm_js.js"
-    ]
   }
 }
