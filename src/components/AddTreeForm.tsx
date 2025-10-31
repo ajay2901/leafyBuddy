@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-import { storage } from '@/lib/firebase';
+import { getFirebaseStorage } from '@/lib/firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import imageCompression from 'browser-image-compression';
 
@@ -87,7 +87,10 @@ export default function AddTreeForm({ onSuccess, onCancel }: AddTreeFormProps) {
         useWebWorker: true,
       });
 
+      const storage = getFirebaseStorage();
+      if (!storage) throw new Error('Storage not available');
       const imageRef = ref(storage, `trees/${user.id}/${Date.now()}_${formData.image.name}`);
+
       const snapshot = await uploadBytes(imageRef, compressedImage);
       const imageUrl = await getDownloadURL(snapshot.ref);
 
