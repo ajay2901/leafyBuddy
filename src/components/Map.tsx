@@ -36,8 +36,8 @@ export default function Map({ trees, onTreeClick }: MapProps) {
     });
 
     // Add navigation controls
-    map.current.addControl(new maplibregl.NavigationControl(), 'top-right');
-    map.current.addControl(new maplibregl.FullscreenControl(), 'top-right');
+    map.current.addControl(new maplibregl.NavigationControl({}), 'top-right');
+    map.current.addControl(new maplibregl.FullscreenControl({}), 'top-right');
     
     // Add geolocate control
     const geolocate = new maplibregl.GeolocateControl({
